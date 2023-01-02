@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ewm-stats</artifactId>
+	<artifactId>stats-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>stats-server</name>
