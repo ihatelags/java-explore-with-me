@@ -29,7 +29,7 @@ services:
     depends_on:
       - stats-server-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-stats-db:5432/stats-server
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-server-db:5432/stats-server
 
   ewm-service:
     build: ewm-service
