@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Имейл не должен быть пустым и должен содержать символ @.");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ConflictException("Пользователь с имейлом " + user.getEmail()+ " уже существует.");
+            throw new ConflictException("Пользователь с имейлом " + user.getEmail() + " уже существует.");
         }
     }
 }
