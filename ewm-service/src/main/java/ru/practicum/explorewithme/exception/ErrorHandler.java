@@ -28,7 +28,7 @@ public class ErrorHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiError handleMethodArgumentNotValidException (final MethodArgumentNotValidException ex) {
+    public ApiError handleMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
         return ApiError.builder()
                 .errors(List.of(Arrays.toString(ex.getStackTrace())))
                 .message(ex.getMessage())
