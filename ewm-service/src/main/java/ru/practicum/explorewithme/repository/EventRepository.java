@@ -12,6 +12,7 @@ import ru.practicum.explorewithme.model.event.EventStatus;
 import ru.practicum.explorewithme.model.user.User;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -90,5 +91,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> getAllEventsPublicByEventDateAll(String text, List<Category> categoryEntities, Boolean paid,
                                                  LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                  PageRequest pageRequest);
+
+    @Query("select e " +
+            "from Event e " +
+            "where e.id in ?1 " +
+            "group by e.id " +
+            "order by e.eventDate desc")
+    Collection<Event> getEventsForCompilation(Collection<Long> eventIds);
 
 }

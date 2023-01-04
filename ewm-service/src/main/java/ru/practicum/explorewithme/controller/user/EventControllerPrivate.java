@@ -8,7 +8,7 @@ import ru.practicum.explorewithme.model.event.dto.EventFullDto;
 import ru.practicum.explorewithme.model.event.dto.EventShortDto;
 import ru.practicum.explorewithme.model.event.dto.NewEventDto;
 import ru.practicum.explorewithme.model.event.dto.UpdateEventRequest;
-import ru.practicum.explorewithme.model.request.Dto;
+import ru.practicum.explorewithme.model.request.dto.RequestDto;
 import ru.practicum.explorewithme.service.event.EventService;
 import ru.practicum.explorewithme.service.request.RequestService;
 import ru.practicum.explorewithme.util.ValidationPageParam;
@@ -65,28 +65,28 @@ public class EventControllerPrivate {
     }
 
     @GetMapping("/{userId}/events/{eventId}/requests")
-    public Collection<Dto.ParticipantRequestDto> getAllRequestsByEvent(@PathVariable() Long userId,
-                                                                       @PathVariable() Long eventId) {
+    public Collection<RequestDto> getAllRequestsByEvent(@PathVariable() Long userId,
+                                                                   @PathVariable() Long eventId) {
         log.info("Получен GET запрос к эндпоинту /users/{}/events/{}/requests", userId, eventId);
-        return RequestMapper.toParticipantRequestDtoCollection(requestService.getAllRequestsByEvent(userId, eventId));
+        return RequestMapper.toRequestDtoCollection(requestService.getAllRequestsByEvent(userId, eventId));
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests/{reqId}/confirm")
-    public Dto.ParticipantRequestDto confirmRequest(@PathVariable() Long userId,
-                                                    @PathVariable() Long eventId,
-                                                    @PathVariable() Long reqId) {
+    public RequestDto confirmRequest(@PathVariable() Long userId,
+                                                @PathVariable() Long eventId,
+                                                @PathVariable() Long reqId) {
         log.info("Получен PATCH запрос к эндпоинту /users/{}/events/{}/requests/{}/confirm",
                 userId, eventId, reqId);
-        return RequestMapper.toParticipantRequestDto(requestService.confirmRequest(userId, eventId, reqId));
+        return RequestMapper.toRequestDto(requestService.confirmRequest(userId, eventId, reqId));
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests/{reqId}/reject")
-    public Dto.ParticipantRequestDto rejectRequest(@PathVariable() Long userId,
-                                                   @PathVariable() Long eventId,
-                                                   @PathVariable() Long reqId) {
+    public RequestDto rejectRequest(@PathVariable() Long userId,
+                                               @PathVariable() Long eventId,
+                                               @PathVariable() Long reqId) {
         log.info("Получен PATCH запрос к эндпоинту /users/{}/events/{}/requests/{}/reject",
                 userId, eventId, reqId);
-        return RequestMapper.toParticipantRequestDto(requestService.rejectRequest(userId, eventId, reqId));
+        return RequestMapper.toRequestDto(requestService.rejectRequest(userId, eventId, reqId));
     }
 
     public PageRequest findPageRequest(Integer from, Integer size) {

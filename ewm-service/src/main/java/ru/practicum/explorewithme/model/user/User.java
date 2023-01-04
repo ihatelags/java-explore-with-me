@@ -3,7 +3,6 @@ package ru.practicum.explorewithme.model.user;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 
 @Getter
 @Setter
@@ -19,9 +18,10 @@ public class User {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
+
     @Column(name = "email", nullable = false, length = 512)
-    @Email
     private String email;
 }

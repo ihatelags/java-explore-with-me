@@ -2,6 +2,7 @@ package ru.practicum.explorewithme.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,7 +21,18 @@ public class ErrorHandler {
         return ApiError.builder()
                 .errors(List.of(Arrays.toString(ex.getStackTrace())))
                 .message(ex.getMessage())
-                .reason("Some errors with validation was handled")
+                .reason("Some errors with validation were handled")
+                .status(HttpStatus.BAD_REQUEST.toString())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ApiError handleMethodArgumentNotValidException (final MethodArgumentNotValidException ex) {
+        return ApiError.builder()
+                .errors(List.of(Arrays.toString(ex.getStackTrace())))
+                .message(ex.getMessage())
+                .reason("Some errors with validation were handled (")
                 .status(HttpStatus.BAD_REQUEST.toString())
                 .build();
     }

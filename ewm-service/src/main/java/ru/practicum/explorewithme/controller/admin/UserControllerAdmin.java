@@ -8,7 +8,6 @@ import ru.practicum.explorewithme.model.user.dto.NewUserRequestDto;
 import ru.practicum.explorewithme.model.user.dto.UserDto;
 import ru.practicum.explorewithme.service.user.UserService;
 import ru.practicum.explorewithme.util.ValidationPageParam;
-import ru.practicum.explorewithme.util.mapper.UserMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,19 +27,19 @@ public class UserControllerAdmin {
         validatePage(from, size);
         log.info("Получен GET запрос к эндпоинту /admin/users?ids={}from={}size={}", ids, from, size);
         final PageRequest pageRequest = findPageRequest(from, size);
-        return UserMapper.toUserDtoCollection(userService.getAllUsers(ids, pageRequest));
+        return userService.getAllUsers(ids, pageRequest);
     }
 
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Long userId) {
         log.info("Получен GET запрос к эндпоинту /admin/users/{}", userId);
-        return UserMapper.toUserDto(userService.getUserById(userId));
+        return userService.getUserById(userId);
     }
 
     @PostMapping
     public UserDto createUser(@RequestBody NewUserRequestDto newUserRequestDto) {
         log.info("Получен POST запрос к эндпоинту /admin/users");
-        return UserMapper.toUserDto(userService.createUser(newUserRequestDto));
+        return userService.createUser(newUserRequestDto);
     }
 
     @DeleteMapping("/{userId}")

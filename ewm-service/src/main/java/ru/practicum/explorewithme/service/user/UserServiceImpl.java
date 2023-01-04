@@ -10,6 +10,7 @@ import ru.practicum.explorewithme.exception.ConflictException;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.model.user.User;
 import ru.practicum.explorewithme.model.user.dto.NewUserRequestDto;
+import ru.practicum.explorewithme.model.user.dto.UserDto;
 import ru.practicum.explorewithme.repository.UserRepository;
 import ru.practicum.explorewithme.util.mapper.UserMapper;
 
@@ -25,29 +26,30 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User createUser(@NotNull NewUserRequestDto newUserRequestDto) {
+    public UserDto createUser(@NotNull NewUserRequestDto newUserRequestDto) {
         User user = UserMapper.toUser(newUserRequestDto);
         validateUser(user);
         User userFromDataBase = userRepository.save(user);
         log.info("Запрос на создание пользователя с id - {}", user.getId());
-        return userFromDataBase;
+        return UserMapper.toUserDto(userFromDataBase);
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с ид " + userId));
         log.info("Запрос на получение пользователя с id - {}", userId);
-        return user;
+        return UserMapper.toUserDto(user);
     }
 
     @Override
-    public Collection<User> getAllUsers(@NotNull List<Long> ids, PageRequest pageRequest) {
+    public Collection<UserDto> getAllUsers(@NotNull List<Long> ids, PageRequest pageRequest) {
         if (ids.isEmpty()) {
             return userRepository.getAllUsersByPage(pageRequest).stream()
+                    .map(UserMapper::toUserDto)
                     .collect(Collectors.toList());
         } else {
-            return userRepository.findAllById(ids);
+            return UserMapper.toUserDtoCollection(userRepository.findAllById(ids));
         }
     }
 

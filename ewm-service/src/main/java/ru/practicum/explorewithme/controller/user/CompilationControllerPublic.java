@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.model.compilation.dto.CompilationDto;
 import ru.practicum.explorewithme.service.compilation.CompilationService;
 import ru.practicum.explorewithme.util.ValidationPageParam;
-import ru.practicum.explorewithme.util.mapper.CompilationMapper;
 
 import java.util.Collection;
 
@@ -22,7 +21,7 @@ public class CompilationControllerPublic {
     @GetMapping("/{compId}")
     public CompilationDto getCompilationById(@PathVariable Long compId) {
         log.info("Получен GET запрос к эндпоинту /compilations/{}", compId);
-        return CompilationMapper.toCompilationDto(compilationService.getCompilationById(compId));
+        return compilationService.getCompilationById(compId);
     }
 
     @GetMapping
@@ -32,7 +31,7 @@ public class CompilationControllerPublic {
         validatePage(from, size);
         log.info("Получен GET запрос к эндпоинту /compilations?pinned={}from={}size={}", pinned, from, size);
         final PageRequest pageRequest = findPageRequest(from, size);
-        return CompilationMapper.toCompilationDtoCollection(compilationService.getAllCompilations(pinned, pageRequest));
+        return compilationService.getAllCompilations(pinned, pageRequest);
     }
 
     public PageRequest findPageRequest(Integer from, Integer size) {

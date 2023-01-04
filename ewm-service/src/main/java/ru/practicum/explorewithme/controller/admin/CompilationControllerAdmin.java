@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.model.compilation.dto.CompilationDto;
 import ru.practicum.explorewithme.model.compilation.dto.NewCompilationDto;
 import ru.practicum.explorewithme.service.compilation.CompilationService;
-import ru.practicum.explorewithme.util.mapper.CompilationMapper;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -17,10 +18,10 @@ public class CompilationControllerAdmin {
     private final CompilationService compilationService;
 
     @PostMapping
-    public CompilationDto createCompilation(@RequestBody NewCompilationDto newCompilationDto) {
+    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
         log.info("Получен POST запрос к эндпоинту /admin/compilations. Compilation title: {}",
                 newCompilationDto.getTitle());
-        return CompilationMapper.toCompilationDto(compilationService.createCompilation(newCompilationDto));
+        return compilationService.createCompilation(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")
