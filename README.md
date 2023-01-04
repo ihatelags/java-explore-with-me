@@ -1,3 +1,4 @@
+Ссылка на пуллреквест:
 https://github.com/ihatelags/java-explore-with-me/pull/2
 
 # Explore With Me
