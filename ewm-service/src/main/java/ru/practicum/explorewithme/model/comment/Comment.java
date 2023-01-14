@@ -22,7 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "comment", nullable = false, length = 7000)
+    @Column(name = "text", length = 7000)
     private String text;
 
     @ManyToOne
@@ -30,9 +30,9 @@ public class Comment {
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "commentator_id")
-    private User commentator;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "created", nullable = false)
+    @Column(name = "created")
     private LocalDateTime created;
 }

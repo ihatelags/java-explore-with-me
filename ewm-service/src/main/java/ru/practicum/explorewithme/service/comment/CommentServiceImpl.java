@@ -2,7 +2,6 @@ package ru.practicum.explorewithme.service.comment;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.explorewithme.exception.BadRequestException;
@@ -21,9 +20,9 @@ import ru.practicum.explorewithme.util.mapper.CommentMapper;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с ид " + userId));
-        comment.setCommentator(user);
+        comment.setUser(user);
 
         Comment commentDB = commentRepository.save(comment);
         log.info("Успешно создан коммент с ид " + commentDB.getId());
@@ -68,9 +67,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment updateCommentByUser(Long userId, @NotNull UpdateCommentDto updateCommentDto) {
         Comment comment = getCommentById(updateCommentDto.getId());
-        if (!comment.getCommentator().getId().equals(userId)) {
+        if (!comment.getUser().getId().equals(userId)) {
             throw new BadRequestException("Нельзя обновлять чужие комменты. Создатель коммента: "
-                    + comment.getCommentator().getId());
+                    + comment.getUser().getId());
         }
         if (updateCommentDto.getComment() != null) {
             comment.setText(updateCommentDto.getComment());
@@ -98,10 +97,10 @@ public class CommentServiceImpl implements CommentService {
                 LocalDateTime.parse(rangeEnd, FORMATTER);
         List<User> userEntities = userRepository.getUsersFromIds(users);
 
-        Page<Comment> comments = commentRepository.getAllCommentsByAdmin(userEntities, start,
+        List<Comment> comments = commentRepository.getAllCommentsByAdmin(userEntities, start,
                 end, pageRequest);
 
-        return CommentMapper.toCommentDtoCollection(comments.getContent());
+        return CommentMapper.toCommentDtoCollection(comments);
     }
 
     @Override
@@ -109,8 +108,7 @@ public class CommentServiceImpl implements CommentService {
         final PageRequest pageRequest = findPageRequest(from, size);
         eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Не найдено событие с ид " + eventId));
-        return commentRepository.getAllCommentsByEvent(eventId, pageRequest).stream()
-                .collect(Collectors.toList());
+        return new ArrayList<>(commentRepository.getAllCommentsByEvent(eventId, pageRequest));
     }
 
     @Override
@@ -126,8 +124,8 @@ public class CommentServiceImpl implements CommentService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с ид " + userId));
 
-        Collection<Comment> comments = commentRepository.getAllCommentsByUser(userId, start,
-                        end, pageRequest).stream().collect(Collectors.toList());
+        List<Comment> comments = commentRepository.getAllCommentsByUser(userId, start,
+                end, pageRequest);
 
         return CommentMapper.toCommentDtoCollection(comments);
     }
@@ -142,9 +140,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteCommentByUser(Long userId, Long commId) {
         Comment comment = getCommentById(commId);
-        if (!comment.getCommentator().getId().equals(userId)) {
+        if (!comment.getUser().getId().equals(userId)) {
             throw new BadRequestException("Нельзя удалять чужие комменты. Создатель коммента: "
-                    + comment.getCommentator().getId());
+                    + comment.getUser().getId());
         }
         commentRepository.deleteById(commId);
         log.info("Коммент с ид " + commId + " успешно удален пользователем.");

@@ -1,6 +1,6 @@
 package ru.practicum.explorewithme.util.mapper;
 
-import lombok.Data;
+import lombok.experimental.UtilityClass;
 import ru.practicum.explorewithme.model.comment.Comment;
 import ru.practicum.explorewithme.model.comment.dto.CommentDto;
 import ru.practicum.explorewithme.model.comment.dto.NewCommentDto;
@@ -8,7 +8,7 @@ import ru.practicum.explorewithme.model.comment.dto.NewCommentDto;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Data
+@UtilityClass
 public class CommentMapper {
 
     public static Collection<CommentDto> toCommentDtoCollection(Collection<Comment> comments) {
@@ -22,7 +22,7 @@ public class CommentMapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .event(comment.getEvent().getId())
-                .commentator(comment.getCommentator().getId())
+                .user(comment.getUser().getId())
                 .created(comment.getCreated())
                 .build();
     }

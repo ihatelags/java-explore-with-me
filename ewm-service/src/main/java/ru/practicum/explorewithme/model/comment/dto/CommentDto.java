@@ -21,7 +21,7 @@ public class CommentDto {
     @NotNull
     private Long event;
     @NotNull
-    private Long commentator;
+    private Long user;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 }
